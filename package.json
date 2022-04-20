@@ -2,6 +2,17 @@
   "name": "keep-forgetting",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
+  "scripts": {
+    "start": "concurrently \"pnpm run start:server\" \"wait-on tcp:3001 && pnpm run start:client\"",
+    "start:client": "react-scripts start",
+    "start:server": "rimraf build && concurrently \"tsc --project src/server/tsconfig.json --watch\" \"wait-on build/server/index.js && nodemon -q build/server/index.js\"",
+    "build": "rimraf build && concurrently \"pnpm run build:server\" \"pnpm run build:client\"",
+    "build:client": "react-scripts build",
+    "build:server": "tsc --project src/server/tsconfig.json",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -29,15 +40,11 @@
     "typescript": "^4.6.3",
     "wait-on": "^6.0.1"
   },
-  "scripts": {
-    "start": "concurrently \"pnpm run start:server\" \"wait-on tcp:3001 && pnpm run start:client\"",
-    "start:client": "react-scripts start",
-    "start:server": "rimraf build && concurrently \"tsc --project src/server/tsconfig.json --watch\" \"wait-on build/server/index.js && nodemon -q build/server/index.js\"",
-    "build": "rimraf build && concurrently \"pnpm run build:server\" \"pnpm run build:client\"",
-    "build:client": "react-scripts build",
-    "build:server": "tsc --project src/server/tsconfig.json",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "peerDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-syntax-flow": "^7.16.7",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
+    "@testing-library/dom": "^8.13.0"
   },
   "eslintConfig": {
     "extends": [
@@ -56,11 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "peerDependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/plugin-syntax-flow": "^7.16.7",
-    "@babel/plugin-transform-react-jsx": "^7.17.3",
-    "@testing-library/dom": "^8.13.0"
   }
 }
